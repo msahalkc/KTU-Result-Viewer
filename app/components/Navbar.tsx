@@ -19,8 +19,8 @@ import {
         className="text-white bg-[#111111] w-[80%] mt-10"
       >
         <NavbarContent>
-          <NavbarBrand>
-            <p className="font-bold text-inherit">KTU Result Viewer</p>
+          <NavbarBrand className='flex md:flex-row flex-col items-start'>
+            <p className="font-bold">KTU Result Viewer</p><p className="font-normal text-tiny md:text-base">: by Muhammed Sahal K C</p>
           </NavbarBrand>
         </NavbarContent>
         <NavbarMenuToggle
@@ -29,24 +29,24 @@ import {
         />
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
           <NavbarItem>
-            <Link href="#" className="text-white">
-              About
+            <Link href="https://msahalkc.netlify.app" className="text-white">
+              Portfolio
             </Link>
           </NavbarItem>
           <NavbarItem>
-            <Link href="#" className="text-white">
+            <Link href="https://github.com/msahalkc/KTU-Result-Viewer" className="text-white">
               Github
             </Link>
           </NavbarItem>
         </NavbarContent>
         <NavbarMenu className="pt-16 text-center">
           <NavbarMenuItem>
-            <Link href="#" className="text-black">
-              About
+            <Link href="https://msahalkc.netlify.app" className="text-black">
+              Portfolio
             </Link>
           </NavbarMenuItem>
           <NavbarMenuItem>
-            <Link href="#" className="text-black">
+            <Link href="https://github.com/msahalkc/KTU-Result-Viewer" className="text-black">
               Github
             </Link>
           </NavbarMenuItem>

@@ -1,22 +1,8 @@
-import type {
-  LoaderFunction,
-  MetaFunction,
-  ActionFunction,
-} from "@remix-run/node";
+import type { LoaderFunction, MetaFunction, ActionFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { useLoaderData, Form } from "@remix-run/react";
-import {
-  Button,
-  Select,
-  SelectItem,
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-} from "@nextui-org/react";
+import { Button, Select, SelectItem, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 import { FaHome } from "react-icons/fa";
 
 export const meta: MetaFunction = () => {
@@ -27,20 +13,52 @@ export const meta: MetaFunction = () => {
 };
 
 export let loader: LoaderFunction = async ({ request }) => {
-  if (!request.url) {
-    return json({ error: "No URL provided" }, 400);
-  }
-
   const queryParams = new URLSearchParams(request.url.split("?")[1]);
-  const data = queryParams.get("data");
+  const program = queryParams.get("program");
 
-  if (!data) {
-    return json({ error: "No data provided" }, 400);
+  if (!program) {
+    return json({ error: "No program provided" }, 400);
   }
 
-  const parsedData = JSON.parse(data);
-  return json(parsedData);
+  try {
+    const jsonData = { program: program };
+
+    const response = await fetch(
+      "https://api.ktu.edu.in/ktu-web-service/anon/result",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Set content type to JSON
+        },
+        body: JSON.stringify(jsonData), // Stringify the JSON object
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    let responseData = await response.json();
+
+    // Remove null properties from response data
+    responseData = removeNullProperties(responseData);
+    return json(responseData); // Return the whole response data
+  } catch (error) {
+    console.error("Error:", error);
+    return json({ error: "Failed to fetch data" }, 500);
+  }
 };
+
+function removeNullProperties(obj) {
+  for (var prop in obj) {
+    if (obj[prop] === null) {
+      delete obj[prop];
+    } else if (typeof obj[prop] === "object") {
+      removeNullProperties(obj[prop]);
+    }
+  }
+  return obj;
+}
 
 export let action: ActionFunction = async ({ request }) => {
   let formData = await request.formData();
@@ -55,35 +73,59 @@ export default function SemesterSelect() {
   return (
     <div className="flex-1 flex flex-col pt-10 items-center gap-5">
       <div className="flex-1 flex items-center justify-center">
-      <Table aria-label="Example static collection table" className='w-fit' radius='none' removeWrapper>
-        <TableHeader className=''>
-          <TableColumn className='bg-[#111] font-semibold text-white text-md'>Result Name</TableColumn>
-          <TableColumn className='bg-[#111] font-semibold text-white text-md'>Publish Date</TableColumn>
-          <TableColumn className='bg-[#111] font-semibold text-white text-md'>View Result</TableColumn>
-        </TableHeader>
-        <TableBody>
-          {semData.map((sem, index) => (
-            <TableRow key={`${sem.examDefId},${sem.schemeId}`}>
-              <TableCell>{sem.resultName}</TableCell>
-              <TableCell>{sem.publishDate}</TableCell>
-              <TableCell>
-                <Form method="post">
-                  <input
-                    type="hidden"
-                    name="semester"
-                    value={`${sem.examDefId},${sem.schemeId}`}
-                  />
-                  <Button className='bg-transparent border-1 border-[#111] rounded-none' type="submit">
-                    View Result
-                  </Button>
-                </Form>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+        <Table
+          aria-label="Example static collection table"
+          className="w-fit px-10"
+          radius="none"
+          removeWrapper
+        >
+          <TableHeader className="">
+            <TableColumn className="bg-[#111] font-semibold text-white text-md">
+              Result Name
+            </TableColumn>
+            {/* Hide "Publish Date" column on smaller screens */}
+            <TableColumn className="bg-[#111] font-semibold text-white text-md hidden md:table-cell">
+              Publish Date
+            </TableColumn>
+            <TableColumn className="bg-[#111] font-semibold text-white text-md">
+              View Result
+            </TableColumn>
+          </TableHeader>
+          <TableBody>
+            {semData.map((sem, index) => (
+              <TableRow key={`${sem.examDefId},${sem.schemeId}`}>
+                <TableCell>{sem.resultName}</TableCell>
+                {/* Hide "Publish Date" column on smaller screens */}
+                <TableCell className="hidden md:table-cell">
+                  {sem.publishDate}
+                </TableCell>
+                <TableCell>
+                  <Form method="post">
+                    <input
+                      type="hidden"
+                      name="semester"
+                      value={`${sem.examDefId},${sem.schemeId}`}
+                    />
+                    <Button
+                      className="bg-transparent border-1 border-[#111] rounded-none"
+                      type="submit"
+                    >
+                      View Result
+                    </Button>
+                  </Form>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
-      <Link to="/" className="flex items-center gap-5 bg-[#111] text-white px-5 mb-10">Back to Home<FaHome /></Link>
+      <Link
+        to="/"
+        className="flex items-center gap-5 bg-[#111] text-white px-5 mb-10"
+      >
+        Back to Home
+        <FaHome />
+      </Link>
     </div>
   );
 }

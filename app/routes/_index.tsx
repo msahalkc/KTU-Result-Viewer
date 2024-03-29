@@ -5,32 +5,15 @@ import { Button, Select, SelectItem, Card, CardBody } from "@nextui-org/react";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "KTU Result Viewer" },
+    { name: "description", content: "Your own KTU Result Viewer" },
   ];
 };
 
 export let action: ActionFunction = async ({ request }) => {
   let formData = await request.formData();
   let program = formData.get("program");
-  const jsonData = { program: program };
-  const response = await fetch(
-    "https://api.ktu.edu.in/ktu-web-service/anon/result",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json", // Set content type to JSON
-      },
-      body: JSON.stringify(jsonData), // Stringify the JSON object
-    }
-  );
-  const responseData = await response.json();
-
-  // Remove null properties from response data
-  const cleanedData = removeNullProperties(responseData);
-
-  // Redirect to another page with the cleaned data
-  return redirect(`/semesterSelect?data=${JSON.stringify(cleanedData)}`);
+  return redirect(`/semesterSelect?program=${encodeURIComponent(program)}`);
 };
 
 export async function loader() {
@@ -78,7 +61,8 @@ export default function Index() {
 
   return (
     <div className="flex-1 flex flex-col gap-5 items-center">
-      <div className="text-center fontBungee text-5xl sm:my-16">
+      <div className="flex-1 flex items-center my-16 flex-col gap-10 md:justify-start md:my-24 w-full">
+      <div className="text-center fontBungee text-2xl md:text-5xl drop-shadow-lg">
         KTU Results Made
         <br />
         Simple: Instant
@@ -86,10 +70,10 @@ export default function Index() {
         Access Anytime,
         <br /> Anywhere
       </div>
-      <Form className="flex gap-5 items-center" method="post">
+      <Form className="flex flex-col md:flex-row gap-5 items-center w-full" method="post">
         <Select
           label="Select a program"
-          className="w-96"
+          className="md:w-96"
           name="program"
           isRequired
           radius="none"
@@ -101,7 +85,7 @@ export default function Index() {
           ))}
         </Select>
         <Button
-          className="bg-[#111] text-white"
+          className="bg-[#111] text-white w-full md:w-fit"
           type="submit"
           radius="none"
           size="lg"
@@ -109,13 +93,7 @@ export default function Index() {
           View Results
         </Button>
       </Form>
-      <footer className="absolute bottom-10">
-        <Card shadow='none' className='bg-[#111] text-white' radius='none'>
-          <CardBody>
-            <p>Created by: <a href="https://github.com/msahalkc">Muhammed Sahal K C</a></p>
-          </CardBody>
-        </Card>
-      </footer>
+      </div>
     </div>
   );
 }

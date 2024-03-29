@@ -25,7 +25,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <NextUIProvider>
-          <div className="min-h-screen min-w-screen flex flex-col items-center">
+          <div className="min-h-dvh min-w-dvw md:min-h-screen md:min-w-screen flex flex-col items-center">
           <Navbar />
           {children}
           </div>
