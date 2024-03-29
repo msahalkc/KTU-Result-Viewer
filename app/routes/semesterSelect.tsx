@@ -7,7 +7,7 @@ import { FaHome } from "react-icons/fa";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Semester Selection" },
+    { title: "KTU Result Viewer: Semester Selection" },
     { name: "description", content: "Select a semester" },
   ];
 };

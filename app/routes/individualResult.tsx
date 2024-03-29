@@ -11,8 +11,8 @@ import { FaHome } from "react-icons/fa";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Individual Result" },
-    { name: "description", content: "Individual Result Page" },
+    { title: "KTU Result Viewer: Result Form" },
+    { name: "description", content: "Result Form" },
   ];
 };
 

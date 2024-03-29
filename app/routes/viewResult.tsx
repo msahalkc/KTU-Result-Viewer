@@ -12,6 +12,13 @@ import {
 } from "@nextui-org/react";
 import { FaHome } from "react-icons/fa";
 
+export const meta: MetaFunction = () => {
+  return [
+    { title: "KTU Result Viewer: View Result" },
+    { name: "description", content: "Individual Result Page" },
+  ];
+};
+
 export let loader: LoaderFunction = async ({ request }) => {
   const queryParams = new URLSearchParams(request.url.split("?")[1]);
   const registerNo = queryParams.get("registerNo");
