@@ -1,36 +1,60 @@
-# Welcome to Remix + Vite!
+# KTU Result Viewer
 
-📖 See the [Remix docs](https://remix.run/docs) and the [Remix Vite docs](https://remix.run/docs/en/main/future/vite) for details on supported features.
+KTU Result Viewer is an application that allows users to view individual examination results from the Kerala Technological University (KTU). Users can select their program, semester, and enter their register number and date of birth to view their results.
 
-## Development
+## Installation
 
-Run the Vite dev server:
+To run the KTU Result Viewer locally, follow these steps:
 
-```shellscript
-npm run dev
-```
+1. Clone the repository:
 
-## Deployment
+    ```bash
+    git clone https://github.com/msahalkc/KTU-Result-Viewer
+    ```
 
-First, build your app for production:
+2. Install dependencies:
 
-```sh
-npm run build
-```
+    ```bash
+    npm install
+    ```
 
-Then run the app in production mode:
+3. Start the development server:
 
-```sh
-npm start
-```
+    ```bash
+    npm run dev
+    ```
 
-Now you'll need to pick a host to deploy it to.
+4. Open your web browser and visit `http://localhost:3000` to view the application.
 
-### DIY
+## Components
 
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
+### Navbar Component (`app/components/Navbar.tsx`)
 
-Make sure to deploy the output of `npm run build`
+The Navbar component provides navigation links to the portfolio and GitHub repository of the project creator, Muhammed Sahal K C.
 
-- `build/server`
-- `build/client`
+### Index Route (`app/routes/_index.tsx`)
+
+The Index route displays the main page of the application where users can select their program and proceed to select the semester.
+
+### SemesterSelect Route (`app/routes/semesterSelect.tsx`)
+
+The SemesterSelect route allows users to select the semester for which they want to view the results. It fetches the available semesters from the KTU API and displays them in a table format.
+
+### IndividualResult Route (`app/routes/individualResult.tsx`)
+
+The IndividualResult route enables users to enter their register number and date of birth to view their individual examination results for a specific semester.
+
+### ViewResult Route (`app/routes/viewResult.tsx`)
+
+The ViewResult route displays the individual examination results for the specified register number, date of birth, semester, exam definition ID, and scheme ID.
+
+## Technologies Used
+
+- React
+- Next.js
+- Remix
+- NextUI (Next.js UI Component Library)
+
+## Contributors
+
+- Muhammed Sahal K C
