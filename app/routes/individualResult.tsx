@@ -1,8 +1,13 @@
-import type { LoaderFunction, MetaFunction, ActionFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import type {
+  LoaderFunction,
+  MetaFunction,
+  ActionFunction,
+} from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { useLoaderData, Form } from "@remix-run/react";
 import { Input, Button } from "@nextui-org/react";
+import { FaHome } from "react-icons/fa";
 
 export const meta: MetaFunction = () => {
   return [
@@ -24,18 +29,6 @@ export let loader: LoaderFunction = async ({ request }) => {
   return json({ examDefId, schemeId });
 };
 
-// Function to remove key-value pairs with null values recursively
-function removeNullProperties(obj) {
-  for (var prop in obj) {
-    if (obj[prop] === null) {
-      delete obj[prop];
-    } else if (typeof obj[prop] === 'object') {
-      removeNullProperties(obj[prop]);
-    }
-  }
-  return obj;
-}
-
 export let action: ActionFunction = async ({ request }) => {
   let formData = await request.formData();
   let registerNo = formData.get("registerNo");
@@ -44,58 +37,41 @@ export let action: ActionFunction = async ({ request }) => {
   let examDefId = parseInt(formData.get("examDefId"));
 
   // Convert date of birth to the server-compatible format (YYYY-DD-MM)
-  const dobParts = dateOfBirth.split('/');
+  const dobParts = dateOfBirth.split("/");
   const formattedDOB = `${dobParts[2]}-${dobParts[1]}-${dobParts[0]}`;
 
-  const jsonData = {
-    "registerNo": registerNo,
-    "dateOfBirth": formattedDOB,
-    "examDefId": examDefId,
-    "schemeId": schemeId
-  };
-
-  console.log(jsonData);
-
-  const response = await fetch(
-    'https://api.ktu.edu.in/ktu-web-service/anon/individualresult',
-    {
-      method: 'POST',
-      headers: {
-        "Content-Type": 'application/json',
-      },
-      body: JSON.stringify(jsonData),
-    }
+  // Redirect to viewResult page with query parameters
+  return redirect(
+    `/viewResult?registerNo=${registerNo}&dateOfBirth=${formattedDOB}&schemeId=${schemeId}&examDefId=${examDefId}`
   );
-
-  let responseData = await response.json();
-
-  // Remove key-value pairs with null values
-  responseData = removeNullProperties(responseData);
-  console.log(responseData);
-  return json(responseData)
 };
 
 export default function IndividualResult() {
   const { examDefId, schemeId } = useLoaderData();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen min-w-screen">
-      <Form method="post" className="flex gap-5 flex-col w-[50%]">
+    <div className="flex-1 flex flex-col w-full items-center justify-center">
+      <Form
+        method="post"
+        className="flex-1 flex gap-5 flex-col sm:w-[25%] items-center justify-center"
+      >
         <Input
           type="text"
           label="Register Number"
           name="registerNo"
           pattern="[A-Z]{3}\d{2}[A-Z]{2}\d{3}"
           title="Please enter a valid register number in the format ABC12AB123"
-          required
+          isRequired
+          radius='none'
         />
         <Input
           type="text"
           label="Date of Birth"
           name="dateOfBirth"
-          pattern="(0[1-9]|[12][0-9]|3[01])\-(0[1-9]|1[0-2])\-(19|20)\d{2}"
+          pattern="(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|20)\d{2}"
           title="Please enter a valid date of birth in the format MM/DD/YYYY"
-          required
+          isRequired
+          radius='none'
         />
         <Input
           type="number"
@@ -103,6 +79,8 @@ export default function IndividualResult() {
           name="examDefId"
           value={examDefId}
           className="hidden"
+          isRequired
+          radius='none'
         />
         <Input
           type="number"
@@ -110,12 +88,24 @@ export default function IndividualResult() {
           name="schemeId"
           value={schemeId}
           className="hidden"
+          isRequired
+          radius='none'
         />
-        <Button type="submit" color="primary">
+        <Button
+          className="bg-[#111] text-white w-full"
+          type="submit"
+          radius="none"
+        >
           Submit
         </Button>
       </Form>
-      <Link to="/">Back to Index</Link>
+      <Link
+        to="/"
+        className="flex items-center gap-5 bg-[#111] text-white px-5 mb-10"
+      >
+        Back to Home
+        <FaHome />
+      </Link>
     </div>
   );
 }

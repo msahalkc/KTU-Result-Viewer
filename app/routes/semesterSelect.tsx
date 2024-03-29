@@ -1,8 +1,23 @@
-import type { LoaderFunction, MetaFunction, ActionFunction } from "@remix-run/node";
+import type {
+  LoaderFunction,
+  MetaFunction,
+  ActionFunction,
+} from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { useLoaderData, Form } from "@remix-run/react";
-import { Button, Select, SelectItem } from "@nextui-org/react";
+import {
+  Button,
+  Select,
+  SelectItem,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@nextui-org/react";
+import { FaHome } from "react-icons/fa";
 
 export const meta: MetaFunction = () => {
   return [
@@ -12,6 +27,10 @@ export const meta: MetaFunction = () => {
 };
 
 export let loader: LoaderFunction = async ({ request }) => {
+  if (!request.url) {
+    return json({ error: "No URL provided" }, 400);
+  }
+
   const queryParams = new URLSearchParams(request.url.split("?")[1]);
   const data = queryParams.get("data");
 
@@ -34,23 +53,37 @@ export default function SemesterSelect() {
   const semData = useLoaderData();
 
   return (
-    <div className="flex flex-col min-h-screen justify-center items-center gap-5">
-      <Form method="post" className="w-96 flex flex-col gap-5">
-        <Select label="Select semester" className="w-full" name="semester">
-          {semData.map((sem) => (
-            <SelectItem
-              key={`${sem.examDefId},${sem.schemeId}`}
-              value={sem.resultName}
-            >
-              {sem.resultName}
-            </SelectItem>
+    <div className="flex-1 flex flex-col pt-10 items-center gap-5">
+      <div className="flex-1 flex items-center justify-center">
+      <Table aria-label="Example static collection table" className='w-fit' radius='none' removeWrapper>
+        <TableHeader className=''>
+          <TableColumn className='bg-[#111] font-semibold text-white text-md'>Result Name</TableColumn>
+          <TableColumn className='bg-[#111] font-semibold text-white text-md'>Publish Date</TableColumn>
+          <TableColumn className='bg-[#111] font-semibold text-white text-md'>View Result</TableColumn>
+        </TableHeader>
+        <TableBody>
+          {semData.map((sem, index) => (
+            <TableRow key={`${sem.examDefId},${sem.schemeId}`}>
+              <TableCell>{sem.resultName}</TableCell>
+              <TableCell>{sem.publishDate}</TableCell>
+              <TableCell>
+                <Form method="post">
+                  <input
+                    type="hidden"
+                    name="semester"
+                    value={`${sem.examDefId},${sem.schemeId}`}
+                  />
+                  <Button className='bg-transparent border-1 border-[#111] rounded-none' type="submit">
+                    View Result
+                  </Button>
+                </Form>
+              </TableCell>
+            </TableRow>
           ))}
-        </Select>
-        <Button color="primary" type="submit">
-          View Results
-        </Button>
-      </Form>
-      <Link to="/">Back to Index</Link>
+        </TableBody>
+      </Table>
+      </div>
+      <Link to="/" className="flex items-center gap-5 bg-[#111] text-white px-5 mb-10">Back to Home<FaHome /></Link>
     </div>
   );
 }

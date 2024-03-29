@@ -1,7 +1,7 @@
 import type { ActionFunction, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData, Form } from "@remix-run/react";
-import { Button, Select, SelectItem } from "@nextui-org/react";
+import { Button, Select, SelectItem, Card, CardBody } from "@nextui-org/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -13,7 +13,6 @@ export const meta: MetaFunction = () => {
 export let action: ActionFunction = async ({ request }) => {
   let formData = await request.formData();
   let program = formData.get("program");
-  console.log(program);
   const jsonData = { program: program };
   const response = await fetch(
     "https://api.ktu.edu.in/ktu-web-service/anon/result",
@@ -26,10 +25,12 @@ export let action: ActionFunction = async ({ request }) => {
     }
   );
   const responseData = await response.json();
-  console.log(responseData);
-  
-  // Redirect to another page with the response data
-  return redirect(`/semesterSelect?data=${JSON.stringify(responseData)}`);
+
+  // Remove null properties from response data
+  const cleanedData = removeNullProperties(responseData);
+
+  // Redirect to another page with the cleaned data
+  return redirect(`/semesterSelect?data=${JSON.stringify(cleanedData)}`);
 };
 
 export async function loader() {
@@ -49,7 +50,11 @@ export async function loader() {
       throw new Error("Network response was not ok");
     }
 
-    const responseData = await response.json();
+    let responseData = await response.json();
+
+    // Remove null properties from response data
+    responseData = removeNullProperties(responseData);
+
     return json(responseData); // Return the whole response data
   } catch (error) {
     console.error("Error:", error);
@@ -57,26 +62,60 @@ export async function loader() {
   }
 }
 
+function removeNullProperties(obj) {
+  for (var prop in obj) {
+    if (obj[prop] === null) {
+      delete obj[prop];
+    } else if (typeof obj[prop] === "object") {
+      removeNullProperties(obj[prop]);
+    }
+  }
+  return obj;
+}
+
 export default function Index() {
   const { program } = useLoaderData();
 
   return (
-    <div
-      style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}
-      className="flex flex-col pt-10 gap-5 min-w-96 items-center justify-center"
-    >
-      <Form className="w-96 flex flex-col gap-5" method="post">
-        <Select label="Select a program" className="w-full" name="program">
+    <div className="flex-1 flex flex-col gap-5 items-center">
+      <div className="text-center fontBungee text-5xl sm:my-16">
+        KTU Results Made
+        <br />
+        Simple: Instant
+        <br />
+        Access Anytime,
+        <br /> Anywhere
+      </div>
+      <Form className="flex gap-5 items-center" method="post">
+        <Select
+          label="Select a program"
+          className="w-96"
+          name="program"
+          isRequired
+          radius="none"
+        >
           {program.map((programItem) => (
             <SelectItem key={programItem.id} value={programItem.name}>
               {programItem.name}
             </SelectItem>
           ))}
         </Select>
-        <Button color="primary" type="submit">
+        <Button
+          className="bg-[#111] text-white"
+          type="submit"
+          radius="none"
+          size="lg"
+        >
           View Results
         </Button>
       </Form>
+      <footer className="absolute bottom-10">
+        <Card shadow='none' className='bg-[#111] text-white' radius='none'>
+          <CardBody>
+            <p>Created by: <a href="https://github.com/msahalkc">Muhammed Sahal K C</a></p>
+          </CardBody>
+        </Card>
+      </footer>
     </div>
   );
 }
