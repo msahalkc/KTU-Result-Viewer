@@ -51,9 +51,9 @@ The ViewResult route displays the individual examination results for the specifi
 ## Technologies Used
 
 - React
-- Next.js
 - Remix
 - NextUI (Next.js UI Component Library)
+- KTU Result API
 
 ## Contributors
 
