@@ -1,3 +1,4 @@
+import axios from 'axios';
 import type { ActionFunction, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData, Form } from "@remix-run/react";
@@ -21,19 +22,16 @@ export async function loader() {
     const formData = new FormData();
     formData.append("data", "programs");
 
-    const response = await fetch(
+    const response = await axios.post(
       "https://api.ktu.edu.in/ktu-web-service/anon/masterData",
-      {
-        method: "POST",
-        body: formData,
-      }
+      formData
     );
 
-    if (!response.ok) {
+    if (!response.data) {
       throw new Error("Network response was not ok");
     }
 
-    let responseData = await response.json();
+    let responseData = response.data;
 
     // Remove null properties from response data
     responseData = removeNullProperties(responseData);

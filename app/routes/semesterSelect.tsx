@@ -1,3 +1,4 @@
+import axios from 'axios';
 import type { LoaderFunction, MetaFunction, ActionFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Link } from "@remix-run/react";
@@ -23,22 +24,21 @@ export let loader: LoaderFunction = async ({ request }) => {
   try {
     const jsonData = { program: program };
 
-    const response = await fetch(
+    const response = await axios.post(
       "https://api.ktu.edu.in/ktu-web-service/anon/result",
+      jsonData,
       {
-        method: "POST",
         headers: {
           "Content-Type": "application/json", // Set content type to JSON
         },
-        body: JSON.stringify(jsonData), // Stringify the JSON object
       }
     );
 
-    if (!response.ok) {
+    if (!response.data) {
       throw new Error("Network response was not ok");
     }
 
-    let responseData = await response.json();
+    let responseData = response.data;
 
     // Remove null properties from response data
     responseData = removeNullProperties(responseData);

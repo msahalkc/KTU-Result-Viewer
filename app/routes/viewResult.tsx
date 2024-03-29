@@ -1,6 +1,7 @@
+import axios from "axios";
 import { Link, useLoaderData } from "@remix-run/react";
 import { json } from "@remix-run/node";
-import type { LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { Card, CardBody } from "@nextui-org/react";
 import {
   Table,
@@ -37,22 +38,26 @@ export let loader: LoaderFunction = async ({ request }) => {
     schemeId: schemeId,
   };
 
-  const response = await fetch(
-    "https://api.ktu.edu.in/ktu-web-service/anon/individualresult",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(jsonData),
-    }
-  );
+  try {
+    const response = await axios.post(
+      "https://api.ktu.edu.in/ktu-web-service/anon/individualresult",
+      jsonData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  let responseData = await response.json();
+    let responseData = response.data;
 
-  // Remove key-value pairs with null values
-  responseData = removeNullProperties(responseData);
-  return json({ responseData });
+    // Remove key-value pairs with null values
+    responseData = removeNullProperties(responseData);
+    return json({ responseData });
+  } catch (error) {
+    console.error("Error:", error);
+    return json({ error: "Failed to fetch data" }, 500);
+  }
 };
 
 // Function to remove key-value pairs with null values recursively
@@ -69,6 +74,22 @@ function removeNullProperties(obj) {
 
 export default function ViewResult() {
   const { responseData } = useLoaderData();
+
+  if (!responseData) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center">
+        <p className="text-danger">Register number and date of birth do not match.</p>
+        <Link
+        to="/"
+        className="flex items-center gap-5 bg-[#111] text-white px-5 mb-10"
+      >
+        Back to Home
+        <FaHome />
+      </Link>
+      </div>
+    );
+  }
+
   const resultDetails = responseData.resultDetails;
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-5 w-full gap-5">
@@ -137,7 +158,9 @@ export default function ViewResult() {
           <TableBody>
             {resultDetails.map((subResult, index) => (
               <TableRow key={index}>
-                <TableCell className="hidden md:table-cell">{index+1}</TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {index + 1}
+                </TableCell>
                 <TableCell>{subResult.courseName}</TableCell>
                 <TableCell>{subResult.grade}</TableCell>
                 <TableCell>{subResult.credits}</TableCell>
