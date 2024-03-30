@@ -108,7 +108,48 @@ export default function ViewResult() {
                 {responseData.firstName}
               </p>
             </div>
-            {/* Add similar blocks for other details */}
+            <div className="flex md:flex-row flex-col">
+              <p className="md:w-[50%]">College</p>
+              <p className="hidden md:block">:</p>
+              <p className="md:w-[50%] font-semibold">
+                {responseData.institutionName}
+              </p>
+            </div>
+            <div className="flex md:flex-row flex-col">
+              <p className="md:w-[50%]">Register Number</p>
+              <p className="hidden md:block">:</p>
+              <p className="md:w-[50%] font-semibold">
+                {responseData.registerNo}
+              </p>
+            </div>
+            <div className="flex md:flex-row flex-col">
+              <p className="md:w-[50%]">Semester</p>
+              <p className="hidden md:block">:</p>
+              <p className="md:w-[50%] font-semibold">
+                {responseData.semesterName}
+              </p>
+            </div>
+            <div className="flex md:flex-row flex-col">
+              <p className="md:w-[50%]">Branch</p>
+              <p className="hidden md:block">:</p>
+              <p className="md:w-[50%] font-semibold">
+                {responseData.branchName}
+              </p>
+            </div>
+            <div className="flex md:flex-row flex-col">
+              <p className="md:w-[50%]">Exam Month and Year</p>
+              <p className="hidden md:block">:</p>
+              <p className="md:w-[50%] font-semibold">
+                {responseData.examYearAndMonth}
+              </p>
+            </div>
+            <div className="flex md:flex-row flex-col">
+              <p className="md:w-[50%]">Exam</p>
+              <p className="hidden md:block">:</p>
+              <p className="md:w-[50%] font-semibold">
+                {responseData.resultName}
+              </p>
+            </div>
           </CardBody>
         </Card>
         <Table aria-label="Example static collection table">
