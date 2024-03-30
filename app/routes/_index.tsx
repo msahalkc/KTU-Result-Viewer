@@ -12,9 +12,14 @@ export const meta: MetaFunction = () => {
 };
 
 export let action: ActionFunction = async ({ request }) => {
-  let formData = await request.formData();
-  let program = formData.get("program");
-  return redirect(`/semesterSelect?program=${encodeURIComponent(program)}`);
+  try {
+    let formData = await request.formData();
+    let program = formData.get("program");
+    return redirect(`/semesterSelect?program=${encodeURIComponent(program)}`);
+  } catch (error) {
+    console.error("Error in action function:", error);
+    return json({ error: "Failed to process the action" }, 500);
+  }
 };
 
 export async function loader() {
@@ -38,7 +43,7 @@ export async function loader() {
 
     return json(responseData); // Return the whole response data
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error in loader function:", error);
     return json({ error: "Failed to fetch data" }, 500);
   }
 }
@@ -55,10 +60,13 @@ function removeNullProperties(obj) {
 }
 
 export default function Index() {
-  const { program } = useLoaderData();
+  const { program, error } = useLoaderData();
 
   return (
     <div className="flex-1 flex flex-col gap-5 items-center">
+      {error && (
+        <div className="text-red-500">{error}</div>
+      )}
       <div className="flex-1 flex items-center my-16 flex-col gap-10 md:justify-start md:my-24 w-full">
       <div className="text-center fontBungee text-2xl md:text-5xl drop-shadow-lg">
         KTU Results Made

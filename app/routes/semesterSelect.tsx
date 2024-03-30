@@ -14,19 +14,17 @@ export const meta: MetaFunction = () => {
 };
 
 export let loader: LoaderFunction = async ({ request }) => {
-  const queryParams = new URLSearchParams(request.url.split("?")[1]);
-  const program = queryParams.get("program");
-
-  if (!program) {
-    return json({ error: "No program provided" }, 400);
-  }
-
   try {
-    const jsonData = { program: program };
+    const queryParams = new URLSearchParams(request.url.split("?")[1]);
+    const program = queryParams.get("program");
+
+    if (!program) {
+      return json({ error: "No program provided" }, 400);
+    }
 
     const response = await axios.post(
       "https://api.ktu.edu.in/ktu-web-service/anon/result",
-      jsonData,
+      { program }, // Simplified syntax for sending JSON data
       {
         headers: {
           "Content-Type": "application/json", // Set content type to JSON
@@ -44,7 +42,7 @@ export let loader: LoaderFunction = async ({ request }) => {
     responseData = removeNullProperties(responseData);
     return json(responseData); // Return the whole response data
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error in loader function:", error);
     return json({ error: "Failed to fetch data" }, 500);
   }
 };
@@ -61,10 +59,15 @@ function removeNullProperties(obj) {
 }
 
 export let action: ActionFunction = async ({ request }) => {
-  let formData = await request.formData();
-  let semester = formData.get("semester");
-  const [examDefId, schemeId] = semester.split(",");
-  return redirect(`/individualResult?data=${examDefId}+${schemeId}`);
+  try {
+    let formData = await request.formData();
+    let semester = formData.get("semester");
+    const [examDefId, schemeId] = semester.split(",");
+    return redirect(`/individualResult?data=${examDefId}+${schemeId}`);
+  } catch (error) {
+    console.error("Error in action function:", error);
+    return json({ error: "Failed to process the action" }, 500);
+  }
 };
 
 export default function SemesterSelect() {
@@ -72,6 +75,9 @@ export default function SemesterSelect() {
 
   return (
     <div className="flex-1 flex flex-col pt-10 items-center gap-5">
+      {semData.error && (
+        <div className="text-red-500">{semData.error}</div>
+      )}
       <div className="flex-1 flex items-center justify-center">
         <Table
           aria-label="Example static collection table"
