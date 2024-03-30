@@ -105,7 +105,7 @@ export default function ViewResult() {
               <p className="md:w-[50%]">Name</p>
               <p className="hidden md:block">:</p>
               <p className="md:w-[50%] font-semibold">
-                {responseData.firstName}
+                {responseData.fullName}
               </p>
             </div>
             <div className="flex md:flex-row flex-col">
