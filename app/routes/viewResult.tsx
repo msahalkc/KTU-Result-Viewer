@@ -94,86 +94,80 @@ export default function ViewResult() {
       </div>
     );
   }
-  
+
   const resultDetails = responseData.resultDetails;
+  let index = 0;
+
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-5 w-full gap-5">
-      <div className="w-full md:w-[75%] flex-1 flex flex-col items-center justify-center  gap-5">
-        <h2 className="font-semibold text-center bg-[#eef2ee] w-full py-2 text-[#003632] rounded-lg">{responseData.resultName}</h2>
-        <Card className="w-full bg-transparent text-white" shadow="none">
-          <CardBody className="flex flex-col gap-2">
-            <div className="flex md:flex-row flex-col">
-              <p className="md:w-[50%]">Name</p>
-              <p className="hidden md:block">:&nbsp;&nbsp;</p>
-              <p className="md:w-[50%]">
-                {responseData.fullName}
-              </p>
-            </div>
-            <div className="flex md:flex-row flex-col">
-              <p className="md:w-[50%]">College</p>
-              <p className="hidden md:block">:&nbsp;&nbsp;</p>
-              <p className="md:w-[50%]">
-                {responseData.institutionName}
-              </p>
-            </div>
-            <div className="flex md:flex-row flex-col">
-              <p className="md:w-[50%]">Register Number</p>
-              <p className="hidden md:block">:&nbsp;&nbsp;</p>
-              <p className="md:w-[50%]">
-                {responseData.registerNo}
-              </p>
-            </div>
-            <div className="flex md:flex-row flex-col">
-              <p className="md:w-[50%]">Semester</p>
-              <p className="hidden md:block">:&nbsp;&nbsp;</p>
-              <p className="md:w-[50%]">
-                {responseData.semesterName}
-              </p>
-            </div>
-            <div className="flex md:flex-row flex-col">
-              <p className="md:w-[50%]">Branch</p>
-              <p className="hidden md:block">:&nbsp;&nbsp;</p>
-              <p className="md:w-[50%]">
-                {responseData.branchName}
-              </p>
-            </div>
-            <div className="flex md:flex-row flex-col">
-              <p className="md:w-[50%]">Exam Month and Year</p>
-              <p className="hidden md:block">:&nbsp;&nbsp;</p>
-              <p className="md:w-[50%]">
-                {responseData.examYearAndMonth}
-              </p>
-            </div>
-            <div className="flex md:flex-row flex-col">
-              <p className="md:w-[50%]">Exam</p>
-              <p className="hidden md:block">:&nbsp;&nbsp;</p>
-              <p className="md:w-[50%]">
-                {responseData.resultName}
-              </p>
-            </div>
-          </CardBody>
-        </Card>
-        <Table aria-label="Example static collection table" removeWrapper>
-          <TableHeader>
-            <TableColumn className="hidden md:table-cell bg-[#eef2ee] text-[#003632]">Sl. no</TableColumn>
-            <TableColumn className="bg-[#eef2ee] text-[#003632]">Course</TableColumn>
-            <TableColumn className="bg-[#eef2ee] text-[#003632]">Grade</TableColumn>
-            <TableColumn className="bg-[#eef2ee] text-[#003632]">Credits</TableColumn>
-          </TableHeader>
-          <TableBody>
-            {resultDetails.map((subResult, index) => (
-              <TableRow key={index}>
-                <TableCell className="hidden md:table-cell">
-                  {index + 1}
-                </TableCell>
-                <TableCell>{subResult.courseName}</TableCell>
-                <TableCell>{subResult.grade}</TableCell>
-                <TableCell>{subResult.credits}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+    <div className="flex flex-col items-center justify-center p-5 w-full md:w-[75%] gap-5">
+      <h2 className="font-semibold text-center bg-[#eef2ee] w-full py-2 text-[#003632] rounded-lg">
+        {responseData.resultName}
+      </h2>
+      <Card className="w-full bg-transparent text-white" shadow="none">
+        <CardBody className="flex flex-col gap-2">
+          <div className="flex md:flex-row flex-col">
+            <p className="md:w-[50%]">Name</p>
+            <p className="hidden md:block">:&nbsp;&nbsp;</p>
+            <p className="md:w-[50%]">{responseData.fullName}</p>
+          </div>
+          <div className="flex md:flex-row flex-col">
+            <p className="md:w-[50%]">College</p>
+            <p className="hidden md:block">:&nbsp;&nbsp;</p>
+            <p className="md:w-[50%]">{responseData.institutionName}</p>
+          </div>
+          <div className="flex md:flex-row flex-col">
+            <p className="md:w-[50%]">Register Number</p>
+            <p className="hidden md:block">:&nbsp;&nbsp;</p>
+            <p className="md:w-[50%]">{responseData.registerNo}</p>
+          </div>
+          <div className="flex md:flex-row flex-col">
+            <p className="md:w-[50%]">Semester</p>
+            <p className="hidden md:block">:&nbsp;&nbsp;</p>
+            <p className="md:w-[50%]">{responseData.semesterName}</p>
+          </div>
+          <div className="flex md:flex-row flex-col">
+            <p className="md:w-[50%]">Branch</p>
+            <p className="hidden md:block">:&nbsp;&nbsp;</p>
+            <p className="md:w-[50%]">{responseData.branchName}</p>
+          </div>
+          <div className="flex md:flex-row flex-col">
+            <p className="md:w-[50%]">Exam Month and Year</p>
+            <p className="hidden md:block">:&nbsp;&nbsp;</p>
+            <p className="md:w-[50%]">{responseData.examYearAndMonth}</p>
+          </div>
+          <div className="flex md:flex-row flex-col">
+            <p className="md:w-[50%]">Exam</p>
+            <p className="hidden md:block">:&nbsp;&nbsp;</p>
+            <p className="md:w-[50%]">{responseData.resultName}</p>
+          </div>
+        </CardBody>
+      </Card>
+      <Table aria-label="Example static collection table" removeWrapper>
+        <TableHeader>
+          <TableColumn className="bg-[#eef2ee] text-[#003632]">
+            Sl. no
+          </TableColumn>
+          <TableColumn className="bg-[#eef2ee] text-[#003632]">
+            Course
+          </TableColumn>
+          <TableColumn className="bg-[#eef2ee] text-[#003632]">
+            Grade
+          </TableColumn>
+          <TableColumn className="bg-[#eef2ee] text-[#003632]">
+            Credits
+          </TableColumn>
+        </TableHeader>
+        <TableBody items={resultDetails}>
+          {(subResult: any) => (
+            <TableRow key={subResult.courseName}>
+              <TableCell>{++index}</TableCell>
+              <TableCell>{subResult.courseName}</TableCell>
+              <TableCell>{subResult.grade}</TableCell>
+              <TableCell>{subResult.credits}</TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
     </div>
   );
 }

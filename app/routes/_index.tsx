@@ -14,7 +14,7 @@ export const meta: MetaFunction = () => {
 export const action: ActionFunction = async ({ request }) => {
   try {
     const formData = await request.formData();
-    const program = formData.get("program");
+    const program = parseInt(formData.get("program")?.toString() ?? '');
     return redirect(`/semesterSelect?program=${encodeURIComponent(program)}`);
   } catch (error) {
     console.error("Error in action function:", error);
@@ -48,7 +48,7 @@ export async function loader() {
   }
 }
 
-function removeNullProperties(obj) {
+function removeNullProperties<T>(obj:T) {
   for (const prop in obj) {
     if (obj[prop] === null) {
       delete obj[prop];
@@ -60,20 +60,10 @@ function removeNullProperties(obj) {
 }
 
 export default function Index() {
-  const { program, error } = useLoaderData();
+  const { program } = useLoaderData<typeof loader>();
 
   return (
-    <div className="flex-1 flex flex-col gap-5 items-center">
-      {error && (
-        <div className="text-red-500">{error}</div>
-      )}
-      <div className="flex-1 flex items-center my-16 flex-col gap-10 md:justify-start md:my-24 w-full">
-      <div className="text-center text-2xl md:text-5xl font-thin">
-        <span className='font-bold'>KTU Results</span>, But
-        <br />
-        With a <span className='font-bold'>better UI</span>
-      </div>
-      <Form className="flex flex-col md:flex-row gap-5 items-center w-full" method="post">
+      <Form className="flex flex-col md:flex-row gap-5 justify-center w-full px-5 items-center" method="post">
         <Select
         color='success'
           label="Select a program"
@@ -81,7 +71,7 @@ export default function Index() {
           name="program"
           isRequired
         >
-          {program.map((programItem) => (
+          {program.map((programItem:any) => (
             <SelectItem color='success' className='text-[#003632]' key={programItem.id} value={programItem.name}>
               {programItem.name}
             </SelectItem>
@@ -95,7 +85,6 @@ export default function Index() {
           View Results
         </Button>
       </Form>
-      </div>
-    </div>
   );
 }
+  

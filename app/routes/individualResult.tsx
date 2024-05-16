@@ -4,9 +4,8 @@ import type {
   ActionFunction,
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Link,useLoaderData, Form } from "@remix-run/react";
+import { useLoaderData, Form } from "@remix-run/react";
 import { Input, Button, DateInput } from "@nextui-org/react";
-import { FaHome } from "react-icons/fa";
 
 export const meta: MetaFunction = () => {
   return [
@@ -38,12 +37,8 @@ export const action: ActionFunction = async ({ request }) => {
     const formData = await request.formData();
     const registerNo = formData.get("registerNo");
     const dateOfBirth = formData.get("dateOfBirth");
-    const schemeId = parseInt(formData.get("schemeId"));
-    const examDefId = parseInt(formData.get("examDefId"));
-
-    // Convert date of birth to the server-compatible format (YYYY-DD-MM)
-    // const dobParts = dateOfBirth.split("/");
-    // const formattedDOB = `${dobParts[2]}-${dobParts[1]}-${dobParts[0]}`;
+    const schemeId = parseInt(formData.get("schemeId")?.toString() ?? '');
+    const examDefId = parseInt(formData.get("examDefId")?.toString() ?? '');
 
     // Redirect to viewResult page with query parameters
     return redirect(
@@ -59,13 +54,10 @@ export default function IndividualResult() {
   const { examDefId, schemeId } = useLoaderData();
 
   return (
-    <div className="flex-1 flex flex-col w-full items-center justify-center">
-      <div>
-        
-      </div>
+    <div className="flex flex-col w-full md:w-96 items-center">
       <Form
         method="post"
-        className="flex gap-5 flex-col sm:w-[25%] items-center justify-center p-5 rounded-lg"
+        className="flex gap-5 flex-col w-full items-center justify-center p-5 rounded-lg"
       >
         <Input
           type="text"
@@ -100,7 +92,7 @@ export default function IndividualResult() {
           isRequired
         />
         <Button
-          className="bg-[#befec1] text-[#003632] font-semibold w-full"
+          className="bg-[#befec1] text-[#003632] font-semibold w-full py-6"
           type="submit"
         >
           Submit

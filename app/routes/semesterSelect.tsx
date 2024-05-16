@@ -1,9 +1,21 @@
-import axios from 'axios';
-import type { LoaderFunction, MetaFunction, ActionFunction } from "@remix-run/node";
+import axios from "axios";
+import type {
+  LoaderFunction,
+  MetaFunction,
+  ActionFunction,
+} from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Link , useLoaderData, Form } from "@remix-run/react";
+import { useLoaderData, Form } from "@remix-run/react";
 
-import { Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
+import {
+  Button,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@nextui-org/react";
 import { FaHome } from "react-icons/fa";
 
 export const meta: MetaFunction = () => {
@@ -71,59 +83,52 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function SemesterSelect() {
-  const semData = useLoaderData();
+  const semData: any[] = useLoaderData();
 
   return (
-    <div className="flex-1 flex flex-col pt-10 items-center gap-5">
-      {semData.error && (
-        <div className="text-red-500">{semData.error}</div>
-      )}
-      <div className="flex-1 flex items-center justify-center">
-        <Table
-          aria-label="Example static collection table"
-          className="w-fit px-10"
-          removeWrapper
-        >
-          <TableHeader>
-            <TableColumn className="bg-[#befec1] font-semibold text-[#003632]  text-md">
-              Result Name
-            </TableColumn>
-            {/* Hide "Publish Date" column on smaller screens */}
-            <TableColumn className="bg-[#befec1] font-semibold text-[#003632]  text-md hidden md:table-cell">
-              Publish Date
-            </TableColumn>
-            <TableColumn className="bg-[#befec1] font-semibold text-[#003632]  text-md">
-              View Result
-            </TableColumn>
-          </TableHeader>
-          <TableBody>
-            {semData.map((sem, index) => (
-              <TableRow key={`${sem.examDefId},${sem.schemeId}`}>
-                <TableCell>{sem.resultName}</TableCell>
-                {/* Hide "Publish Date" column on smaller screens */}
-                <TableCell className="hidden md:table-cell">
-                  {sem.publishDate}
-                </TableCell>
-                <TableCell>
-                  <Form method="post">
-                    <input
-                      type="hidden"
-                      name="semester"
-                      value={`${sem.examDefId},${sem.schemeId}`}
-                    />
-                    <Button
-                      className="bg-transparent border-1 border-[#befec1] text-white font-semibold"
-                      type="submit"
-                    >
-                      View Result
-                    </Button>
-                  </Form>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-    </div>
+      <Table
+        aria-label="Example static collection table"
+        className="w-full md:w-fit px-10"
+        removeWrapper
+      >
+        <TableHeader>
+          <TableColumn className="bg-[#befec1] font-semibold text-[#003632]  text-md">
+            Result Name
+          </TableColumn>
+          {/* Hide "Publish Date" column on smaller screens */}
+          <TableColumn className="bg-[#befec1] font-semibold text-[#003632]  text-md hidden md:table-cell">
+            Publish Date
+          </TableColumn>
+          <TableColumn className="bg-[#befec1] font-semibold text-[#003632]  text-md">
+            View Result
+          </TableColumn>
+        </TableHeader>
+        <TableBody items={semData}>
+          {(sem) => (
+            <TableRow key={`${sem.examDefId},${sem.schemeId}`}>
+              <TableCell>{sem.resultName}</TableCell>
+              {/* Hide "Publish Date" column on smaller screens */}
+              <TableCell className="hidden md:table-cell">
+                {sem.publishDate}
+              </TableCell>
+              <TableCell>
+                <Form method="post">
+                  <input
+                    type="hidden"
+                    name="semester"
+                    value={`${sem.examDefId},${sem.schemeId}`}
+                  />
+                  <Button
+                    className="bg-transparent border-1 border-[#befec1] text-white font-semibold"
+                    type="submit"
+                  >
+                    View Result
+                  </Button>
+                </Form>
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
   );
 }
