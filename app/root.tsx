@@ -40,7 +40,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <div className="flex items-center my-10 flex-col gap-10 w-full">
-      <div className="text-center text-2xl md:text-5xl font-thin">
+      <div className="text-center text-4xl md:text-5xl font-thin">
         <span className="font-bold">KTU Results</span>, But
         <br />
         With a <span className="font-bold">better UI</span>
