@@ -1,4 +1,4 @@
-const { nextui } = require("@nextui-org/react");
+import { nextui } from "@nextui-org/react";
 import type { Config } from 'tailwindcss'
 
 export default {

@@ -2,8 +2,9 @@ import axios from "axios";
 import { Link, useLoaderData } from "@remix-run/react";
 import { json } from "@remix-run/node";
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { Card, CardBody } from "@nextui-org/react";
 import {
+  Card,
+  CardBody,
   Table,
   TableHeader,
   TableBody,
@@ -20,7 +21,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export let loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction = async ({ request }) => {
   try {
     const queryParams = new URLSearchParams(request.url.split("?")[1]);
     const registerNo = queryParams.get("registerNo");
@@ -62,7 +63,7 @@ export let loader: LoaderFunction = async ({ request }) => {
 
 // Function to remove key-value pairs with null values recursively
 function removeNullProperties(obj) {
-  for (var prop in obj) {
+  for (const prop in obj) {
     if (obj[prop] === null) {
       delete obj[prop];
     } else if (typeof obj[prop] === "object") {
@@ -85,7 +86,7 @@ export default function ViewResult() {
         </Card>
         <Link
           to="/"
-          className="flex items-center gap-5 bg-[#111] text-white px-5 mb-10"
+          className="flex items-center gap-5 bg-[#befec1] text-white px-5 mb-10"
         >
           Back to Home
           <FaHome />
@@ -93,71 +94,71 @@ export default function ViewResult() {
       </div>
     );
   }
-
+  
   const resultDetails = responseData.resultDetails;
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-5 w-full gap-5">
       <div className="w-full md:w-[75%] flex-1 flex flex-col items-center justify-center  gap-5">
-        <h2 className="font-semibold text-center">{responseData.resultName}</h2>
-        <Card className="w-full">
+        <h2 className="font-semibold text-center bg-[#eef2ee] w-full py-2 text-[#003632] rounded-lg">{responseData.resultName}</h2>
+        <Card className="w-full bg-transparent text-white" shadow="none">
           <CardBody className="flex flex-col gap-2">
             <div className="flex md:flex-row flex-col">
               <p className="md:w-[50%]">Name</p>
-              <p className="hidden md:block">:</p>
-              <p className="md:w-[50%] font-semibold">
+              <p className="hidden md:block">:&nbsp;&nbsp;</p>
+              <p className="md:w-[50%]">
                 {responseData.fullName}
               </p>
             </div>
             <div className="flex md:flex-row flex-col">
               <p className="md:w-[50%]">College</p>
-              <p className="hidden md:block">:</p>
-              <p className="md:w-[50%] font-semibold">
+              <p className="hidden md:block">:&nbsp;&nbsp;</p>
+              <p className="md:w-[50%]">
                 {responseData.institutionName}
               </p>
             </div>
             <div className="flex md:flex-row flex-col">
               <p className="md:w-[50%]">Register Number</p>
-              <p className="hidden md:block">:</p>
-              <p className="md:w-[50%] font-semibold">
+              <p className="hidden md:block">:&nbsp;&nbsp;</p>
+              <p className="md:w-[50%]">
                 {responseData.registerNo}
               </p>
             </div>
             <div className="flex md:flex-row flex-col">
               <p className="md:w-[50%]">Semester</p>
-              <p className="hidden md:block">:</p>
-              <p className="md:w-[50%] font-semibold">
+              <p className="hidden md:block">:&nbsp;&nbsp;</p>
+              <p className="md:w-[50%]">
                 {responseData.semesterName}
               </p>
             </div>
             <div className="flex md:flex-row flex-col">
               <p className="md:w-[50%]">Branch</p>
-              <p className="hidden md:block">:</p>
-              <p className="md:w-[50%] font-semibold">
+              <p className="hidden md:block">:&nbsp;&nbsp;</p>
+              <p className="md:w-[50%]">
                 {responseData.branchName}
               </p>
             </div>
             <div className="flex md:flex-row flex-col">
               <p className="md:w-[50%]">Exam Month and Year</p>
-              <p className="hidden md:block">:</p>
-              <p className="md:w-[50%] font-semibold">
+              <p className="hidden md:block">:&nbsp;&nbsp;</p>
+              <p className="md:w-[50%]">
                 {responseData.examYearAndMonth}
               </p>
             </div>
             <div className="flex md:flex-row flex-col">
               <p className="md:w-[50%]">Exam</p>
-              <p className="hidden md:block">:</p>
-              <p className="md:w-[50%] font-semibold">
+              <p className="hidden md:block">:&nbsp;&nbsp;</p>
+              <p className="md:w-[50%]">
                 {responseData.resultName}
               </p>
             </div>
           </CardBody>
         </Card>
-        <Table aria-label="Example static collection table">
+        <Table aria-label="Example static collection table" removeWrapper>
           <TableHeader>
-            <TableColumn className="hidden md:table-cell">Sl. no</TableColumn>
-            <TableColumn>Course</TableColumn>
-            <TableColumn>Grade</TableColumn>
-            <TableColumn>Credits</TableColumn>
+            <TableColumn className="hidden md:table-cell bg-[#eef2ee] text-[#003632]">Sl. no</TableColumn>
+            <TableColumn className="bg-[#eef2ee] text-[#003632]">Course</TableColumn>
+            <TableColumn className="bg-[#eef2ee] text-[#003632]">Grade</TableColumn>
+            <TableColumn className="bg-[#eef2ee] text-[#003632]">Credits</TableColumn>
           </TableHeader>
           <TableBody>
             {resultDetails.map((subResult, index) => (
@@ -173,13 +174,6 @@ export default function ViewResult() {
           </TableBody>
         </Table>
       </div>
-      <Link
-        to="/"
-        className="flex items-center gap-5 bg-[#111] text-white px-5 mb-10"
-      >
-        Back to Home
-        <FaHome />
-      </Link>
     </div>
   );
 }

@@ -1,9 +1,9 @@
 import axios from 'axios';
 import type { LoaderFunction, MetaFunction, ActionFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Link } from "@remix-run/react";
-import { useLoaderData, Form } from "@remix-run/react";
-import { Button, Select, SelectItem, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
+import { Link , useLoaderData, Form } from "@remix-run/react";
+
+import { Button, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 import { FaHome } from "react-icons/fa";
 
 export const meta: MetaFunction = () => {
@@ -13,7 +13,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export let loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction = async ({ request }) => {
   try {
     const queryParams = new URLSearchParams(request.url.split("?")[1]);
     const program = queryParams.get("program");
@@ -48,7 +48,7 @@ export let loader: LoaderFunction = async ({ request }) => {
 };
 
 function removeNullProperties(obj) {
-  for (var prop in obj) {
+  for (const prop in obj) {
     if (obj[prop] === null) {
       delete obj[prop];
     } else if (typeof obj[prop] === "object") {
@@ -58,10 +58,10 @@ function removeNullProperties(obj) {
   return obj;
 }
 
-export let action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request }) => {
   try {
-    let formData = await request.formData();
-    let semester = formData.get("semester");
+    const formData = await request.formData();
+    const semester = formData.get("semester");
     const [examDefId, schemeId] = semester.split(",");
     return redirect(`/individualResult?data=${examDefId}+${schemeId}`);
   } catch (error) {
@@ -82,18 +82,17 @@ export default function SemesterSelect() {
         <Table
           aria-label="Example static collection table"
           className="w-fit px-10"
-          radius="none"
           removeWrapper
         >
-          <TableHeader className="">
-            <TableColumn className="bg-[#111] font-semibold text-white text-md">
+          <TableHeader>
+            <TableColumn className="bg-[#befec1] font-semibold text-[#003632]  text-md">
               Result Name
             </TableColumn>
             {/* Hide "Publish Date" column on smaller screens */}
-            <TableColumn className="bg-[#111] font-semibold text-white text-md hidden md:table-cell">
+            <TableColumn className="bg-[#befec1] font-semibold text-[#003632]  text-md hidden md:table-cell">
               Publish Date
             </TableColumn>
-            <TableColumn className="bg-[#111] font-semibold text-white text-md">
+            <TableColumn className="bg-[#befec1] font-semibold text-[#003632]  text-md">
               View Result
             </TableColumn>
           </TableHeader>
@@ -113,7 +112,7 @@ export default function SemesterSelect() {
                       value={`${sem.examDefId},${sem.schemeId}`}
                     />
                     <Button
-                      className="bg-transparent border-1 border-[#111] rounded-none"
+                      className="bg-transparent border-1 border-[#befec1] text-white font-semibold"
                       type="submit"
                     >
                       View Result
@@ -125,13 +124,6 @@ export default function SemesterSelect() {
           </TableBody>
         </Table>
       </div>
-      <Link
-        to="/"
-        className="flex items-center gap-5 bg-[#111] text-white px-5 mb-10"
-      >
-        Back to Home
-        <FaHome />
-      </Link>
     </div>
   );
 }

@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { ActionFunction, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData, Form } from "@remix-run/react";
-import { Button, Select, SelectItem, Card, CardBody } from "@nextui-org/react";
+import { Button, Select, SelectItem } from "@nextui-org/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -11,10 +11,10 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export let action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request }) => {
   try {
-    let formData = await request.formData();
-    let program = formData.get("program");
+    const formData = await request.formData();
+    const program = formData.get("program");
     return redirect(`/semesterSelect?program=${encodeURIComponent(program)}`);
   } catch (error) {
     console.error("Error in action function:", error);
@@ -49,7 +49,7 @@ export async function loader() {
 }
 
 function removeNullProperties(obj) {
-  for (var prop in obj) {
+  for (const prop in obj) {
     if (obj[prop] === null) {
       delete obj[prop];
     } else if (typeof obj[prop] === "object") {
@@ -68,32 +68,28 @@ export default function Index() {
         <div className="text-red-500">{error}</div>
       )}
       <div className="flex-1 flex items-center my-16 flex-col gap-10 md:justify-start md:my-24 w-full">
-      <div className="text-center fontBungee text-2xl md:text-5xl drop-shadow-lg">
-        KTU Results Made
+      <div className="text-center text-2xl md:text-5xl font-thin">
+        <span className='font-bold'>KTU Results</span>, But
         <br />
-        Simple: Instant
-        <br />
-        Access Anytime,
-        <br /> Anywhere
+        With a <span className='font-bold'>better UI</span>
       </div>
       <Form className="flex flex-col md:flex-row gap-5 items-center w-full" method="post">
         <Select
+        color='success'
           label="Select a program"
           className="md:w-96"
           name="program"
           isRequired
-          radius="none"
         >
           {program.map((programItem) => (
-            <SelectItem key={programItem.id} value={programItem.name}>
+            <SelectItem color='success' className='text-[#003632]' key={programItem.id} value={programItem.name}>
               {programItem.name}
             </SelectItem>
           ))}
         </Select>
         <Button
-          className="bg-[#111] text-white w-full md:w-fit"
+          className="bg-[#befec1] text-[#003632] font-semibold w-full md:w-fit"
           type="submit"
-          radius="none"
           size="lg"
         >
           View Results

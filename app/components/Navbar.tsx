@@ -7,7 +7,6 @@ import {
     NavbarMenu,
     NavbarMenuItem,
     Link,
-    Button,
   } from "@nextui-org/react";
   import { useState } from "react";
   
@@ -16,7 +15,7 @@ import {
     return (
       <NextUINavbar
         onMenuOpenChange={setIsMenuOpen}
-        className="text-white bg-[#111111] w-[80%] mt-10"
+        className="text-white bg-transparent backdrop-saturate-100 mt-10"
       >
         <NavbarContent>
           <NavbarBrand className='flex md:flex-row flex-col items-start'>

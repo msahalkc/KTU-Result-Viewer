@@ -4,9 +4,8 @@ import type {
   ActionFunction,
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Link } from "@remix-run/react";
-import { useLoaderData, Form } from "@remix-run/react";
-import { Input, Button } from "@nextui-org/react";
+import { Link,useLoaderData, Form } from "@remix-run/react";
+import { Input, Button, DateInput } from "@nextui-org/react";
 import { FaHome } from "react-icons/fa";
 
 export const meta: MetaFunction = () => {
@@ -16,7 +15,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export let loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction = async ({ request }) => {
   try {
     const queryParams = new URLSearchParams(request.url.split("?")[1]);
     const data = queryParams.get("data");
@@ -34,21 +33,21 @@ export let loader: LoaderFunction = async ({ request }) => {
   }
 };
 
-export let action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request }) => {
   try {
-    let formData = await request.formData();
-    let registerNo = formData.get("registerNo");
-    let dateOfBirth = formData.get("dateOfBirth");
-    let schemeId = parseInt(formData.get("schemeId"));
-    let examDefId = parseInt(formData.get("examDefId"));
+    const formData = await request.formData();
+    const registerNo = formData.get("registerNo");
+    const dateOfBirth = formData.get("dateOfBirth");
+    const schemeId = parseInt(formData.get("schemeId"));
+    const examDefId = parseInt(formData.get("examDefId"));
 
     // Convert date of birth to the server-compatible format (YYYY-DD-MM)
-    const dobParts = dateOfBirth.split("/");
-    const formattedDOB = `${dobParts[2]}-${dobParts[1]}-${dobParts[0]}`;
+    // const dobParts = dateOfBirth.split("/");
+    // const formattedDOB = `${dobParts[2]}-${dobParts[1]}-${dobParts[0]}`;
 
     // Redirect to viewResult page with query parameters
     return redirect(
-      `/viewResult?registerNo=${registerNo}&dateOfBirth=${formattedDOB}&schemeId=${schemeId}&examDefId=${examDefId}`
+      `/viewResult?registerNo=${registerNo}&dateOfBirth=${dateOfBirth}&schemeId=${schemeId}&examDefId=${examDefId}`
     );
   } catch (error) {
     console.error("Error in action function:", error);
@@ -61,9 +60,12 @@ export default function IndividualResult() {
 
   return (
     <div className="flex-1 flex flex-col w-full items-center justify-center">
+      <div>
+        
+      </div>
       <Form
         method="post"
-        className="flex-1 flex gap-5 flex-col sm:w-[25%] items-center justify-center"
+        className="flex gap-5 flex-col sm:w-[25%] items-center justify-center p-5 rounded-lg"
       >
         <Input
           type="text"
@@ -72,16 +74,14 @@ export default function IndividualResult() {
           pattern="[A-Z]{3}\d{2}[A-Z]{2}\d{3}"
           title="Please enter a valid register number in the format ABC12AB123"
           isRequired
-          radius="none"
+          className='text-[#003632]'
         />
-        <Input
-          type="text"
+        <DateInput
           label="Date of Birth"
           name="dateOfBirth"
-          pattern="(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|20)\d{2}"
           title="Please enter a valid date of birth in the format MM/DD/YYYY"
           isRequired
-          radius="none"
+          className='text-[#003632]'
         />
         <Input
           type="number"
@@ -90,7 +90,6 @@ export default function IndividualResult() {
           value={examDefId}
           className="hidden"
           isRequired
-          radius="none"
         />
         <Input
           type="number"
@@ -99,23 +98,14 @@ export default function IndividualResult() {
           value={schemeId}
           className="hidden"
           isRequired
-          radius="none"
         />
         <Button
-          className="bg-[#111] text-white w-full"
+          className="bg-[#befec1] text-[#003632] font-semibold w-full"
           type="submit"
-          radius="none"
         >
           Submit
         </Button>
       </Form>
-      <Link
-        to="/"
-        className="flex items-center gap-5 bg-[#111] text-white px-5 mb-10"
-      >
-        Back to Home
-        <FaHome />
-      </Link>
     </div>
   );
 }
