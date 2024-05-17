@@ -16,7 +16,7 @@ import {
   TableRow,
   TableCell,
 } from "@nextui-org/react";
-import { FaHome } from "react-icons/fa";
+import { removeNullProperties } from "../utils/helper";
 
 export const meta: MetaFunction = () => {
   return [
@@ -35,7 +35,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
 
     const response = await axios.post(
-      "https://api.ktu.edu.in/ktu-web-service/anon/result",
+      `${process.env.KTU_API_SEM_FETCH_URL}`,
       { program }, // Simplified syntax for sending JSON data
       {
         headers: {
@@ -58,17 +58,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     return json({ error: "Failed to fetch data" }, 500);
   }
 };
-
-function removeNullProperties(obj) {
-  for (const prop in obj) {
-    if (obj[prop] === null) {
-      delete obj[prop];
-    } else if (typeof obj[prop] === "object") {
-      removeNullProperties(obj[prop]);
-    }
-  }
-  return obj;
-}
 
 export const action: ActionFunction = async ({ request }) => {
   try {
