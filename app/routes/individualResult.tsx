@@ -17,15 +17,13 @@ export const meta: MetaFunction = () => {
 export const loader: LoaderFunction = async ({ request }) => {
   try {
     const queryParams = new URLSearchParams(request.url.split("?")[1]);
-    const data = queryParams.get("data");
+    const program = queryParams.get("program");
 
-    if (!data) {
+    if (!program) {
       return json({ error: "No data provided" }, 400);
     }
 
-    const [examDefId, schemeId] = data.split(" ");
-
-    return json({ examDefId, schemeId });
+    return json({program});
   } catch (error) {
     console.error("Error in loader function:", error);
     return json({ error: "Failed to load data" }, 500);
@@ -36,13 +34,14 @@ export const action: ActionFunction = async ({ request }) => {
   try {
     const formData = await request.formData();
     const registerNo = formData.get("registerNo");
-    const dateOfBirth = formData.get("dateOfBirth");
-    const schemeId = parseInt(formData.get("schemeId")?.toString() ?? '');
-    const examDefId = parseInt(formData.get("examDefId")?.toString() ?? '');
+    const program = formData.get("program");
+    // const dateOfBirth = formData.get("dateOfBirth");
+    // const schemeId = parseInt(formData.get("schemeId")?.toString() ?? '');
+    // const examDefId = parseInt(formData.get("examDefId")?.toString() ?? '');
 
     // Redirect to viewResult page with query parameters
     return redirect(
-      `/viewResult?registerNo=${registerNo}&dateOfBirth=${dateOfBirth}&schemeId=${schemeId}&examDefId=${examDefId}`
+      `/viewResult?registerNo=${registerNo}&program=${program}`
     );
   } catch (error) {
     console.error("Error in action function:", error);
@@ -51,7 +50,8 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function IndividualResult() {
-  const { examDefId, schemeId } = useLoaderData();
+  // const { examDefId, schemeId } = useLoaderData();
+  const { program } = useLoaderData();
 
   return (
     <div className="flex flex-col w-full md:w-96 items-center">
@@ -68,26 +68,11 @@ export default function IndividualResult() {
           isRequired
           className='text-[#003632]'
         />
-        <DateInput
-          label="Date of Birth"
-          name="dateOfBirth"
-          title="Please enter a valid date of birth in the format MM/DD/YYYY"
-          isRequired
-          className='text-[#003632]'
-        />
         <Input
           type="number"
-          label="Exam Def Id"
-          name="examDefId"
-          value={examDefId}
-          className="hidden"
-          isRequired
-        />
-        <Input
-          type="number"
-          label="Scheme Id"
-          name="schemeId"
-          value={schemeId}
+          label="program"
+          name="program"
+          value={program}
           className="hidden"
           isRequired
         />
