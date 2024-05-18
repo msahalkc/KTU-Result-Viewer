@@ -66,6 +66,29 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function ViewResult() {
   const { responseData } = useLoaderData();
+  if (responseData.fullName === "") {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center gap-5">
+        <Card className="p-5 flex items-center justify-center">
+          <p className="text-center">
+            KTU fixed their API or is working on it;
+            <br />
+            we are currently getting no response from their server,
+            <br />
+            and the app is not working on their side either.
+            <br />I will update you soon.
+          </p>
+        </Card>
+        <Link
+          to="/"
+          className="flex items-center gap-2 bg-[#befec1] text-[#003632] p-2 mb-10 rounded-lg absolute bottom-10"
+        >
+          Back to Home
+          <FaHome />
+        </Link>
+      </div>
+    );
+  }
 
   if (!responseData) {
     return (
