@@ -81,7 +81,7 @@ export default function ViewResult() {
         </Card>
         <Link
           to="/"
-          className="flex items-center gap-5 bg-[#befec1] text-[#003632] px-5 mb-10"
+          className="flex items-center gap-2 bg-[#befec1] text-[#003632] p-2 mb-10 rounded-lg"
         >
           Back to Home
           <FaHome />
@@ -133,7 +133,7 @@ export default function ViewResult() {
       <h2 className="font-semibold text-center w-full py-2 text-[#eef2ee] rounded-lg">
         {semester}
       </h2>
-      <Table aria-label="Example static collection table" removeWrapper>
+      <Table aria-label="Example static collection table" removeWrapper isStriped>
         <TableHeader>
           {/* <TableColumn className="bg-[#eef2ee] text-[#003632]">
             Sl. no
