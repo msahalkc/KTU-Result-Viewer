@@ -74,14 +74,14 @@ export default function ViewResult() {
   if (!responseData) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center gap-5">
-        <Card className="md:w-96 md:h-96 flex items-center justify-center">
+        <Card className="p-5 flex items-center justify-center">
           <p className="text-danger">
-            Register number and date of birth do not match.
+            Register number is missing!
           </p>
         </Card>
         <Link
           to="/"
-          className="flex items-center gap-5 bg-[#befec1] text-white px-5 mb-10"
+          className="flex items-center gap-5 bg-[#befec1] text-[#003632] px-5 mb-10"
         >
           Back to Home
           <FaHome />
