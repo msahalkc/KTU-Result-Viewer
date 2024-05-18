@@ -63,7 +63,7 @@ export default function IndividualResult() {
           type="text"
           label="Register Number"
           name="registerNo"
-          pattern="[A-Z]{3}\d{2}[A-Z]{2}\d{3}"
+          pattern="[A-Z]{3,4}\d{2}[A-Z]{2}\d{3}"
           title="Please enter a valid register number in the format ABC12AB123"
           isRequired
           className='text-[#003632]'
