@@ -81,7 +81,7 @@ export default function ViewResult() {
         </Card>
         <Link
           to="/"
-          className="flex items-center gap-2 bg-[#befec1] text-[#003632] p-2 mb-10 rounded-lg absolute bottom-0"
+          className="flex items-center gap-2 bg-[#befec1] text-[#003632] p-2 mb-10 rounded-lg"
         >
           Back to Home
           <FaHome />
