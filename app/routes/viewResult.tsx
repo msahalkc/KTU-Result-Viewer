@@ -11,6 +11,7 @@ import {
   TableColumn,
   TableRow,
   TableCell,
+  CardHeader,
 } from "@nextui-org/react";
 import { FaHome } from "react-icons/fa";
 import _ from "lodash";
@@ -68,16 +69,22 @@ export default function ViewResult() {
   const { responseData } = useLoaderData();
   if (responseData.fullName === "") {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center gap-5">
+      <div className="flex-1 flex flex-col items-center justify-center gap-5 mx-5">
         <Card className="p-5 flex items-center justify-center">
-          <p className="text-center">
-            KTU fixed their API or is working on it;
-            <br />
-            we are currently getting no response from their server,
-            <br />
-            and the app is not working on their side either.
-            <br />I will update you soon.
-          </p>
+          <CardHeader>
+            <h3 className="font-semibold">KTU didn&apos;t respond with the result data</h3>
+          </CardHeader>
+          <CardBody>
+            <p className="text-justify">
+              KTU fixed their API or is working on it;
+              <br className="hidden md:block" />
+              we are currently getting no response from their server,
+              <br className="hidden md:block" />
+              and the app is not working on their side either.
+              <br className="hidden md:block" />
+              I will update you soon.
+            </p>
+          </CardBody>
         </Card>
         <Link
           to="/"
