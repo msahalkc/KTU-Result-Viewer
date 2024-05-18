@@ -75,8 +75,8 @@ export default function ViewResult() {
     return (
       <div className="flex-1 flex flex-col items-center justify-center gap-5">
         <Card className="p-5 flex items-center justify-center">
-          <p className="text-danger">
-            Register number is missing!
+          <p className="">
+            Register number doesn&apos;t exist!
           </p>
         </Card>
         <Link
