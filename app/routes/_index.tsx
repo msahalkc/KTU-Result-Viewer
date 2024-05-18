@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios from "axios";
 import type { ActionFunction, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData, Form } from "@remix-run/react";
-import { Button, Select, SelectItem } from "@nextui-org/react";
+import { Button, Card, Select, SelectItem, CardBody } from "@nextui-org/react";
 import { removeNullProperties } from "../utils/helper";
 
 export const meta: MetaFunction = () => {
@@ -15,7 +15,7 @@ export const meta: MetaFunction = () => {
 export const action: ActionFunction = async ({ request }) => {
   try {
     const formData = await request.formData();
-    const program = parseInt(formData.get("program")?.toString() ?? '');
+    const program = parseInt(formData.get("program")?.toString() ?? "");
     return redirect(`/individualResult?program=${encodeURIComponent(program)}`);
   } catch (error) {
     console.error("Error in action function:", error);
@@ -27,7 +27,7 @@ export async function loader() {
   try {
     const formData = new FormData();
     formData.append("data", "programs");
-    
+
     const response = await axios.post(
       `${process.env.KTU_API_PROGRAM_FETCH_URL}`,
       formData
@@ -52,29 +52,46 @@ export async function loader() {
 export default function Index() {
   const { program } = useLoaderData<typeof loader>();
 
+  if (!program) {
+    return (
+      <Card>
+        <CardBody>
+          <h5>KTU API down</h5>
+        </CardBody>
+      </Card>
+    );
+  }
+
   return (
-      <Form className="flex flex-col md:flex-row gap-5 justify-center w-full px-5 items-center" method="post">
-        <Select
-        color='success'
-          label="Select a program"
-          className="md:w-96"
-          name="program"
-          isRequired
-        >
-          {program.map((programItem:any) => (
-            <SelectItem color='success' className='text-[#003632]' key={programItem.id} value={programItem.name}>
-              {programItem.name}
-            </SelectItem>
-          ))}
-        </Select>
-        <Button
-          className="bg-[#befec1] text-[#003632] font-semibold w-full md:w-fit"
-          type="submit"
-          size="lg"
-        >
-          View Results
-        </Button>
-      </Form>
+    <Form
+      className="flex flex-col md:flex-row gap-5 justify-center w-full px-5 items-center"
+      method="post"
+    >
+      <Select
+        color="success"
+        label="Select a program"
+        className="md:w-96"
+        name="program"
+        isRequired
+      >
+        {program.map((programItem: any) => (
+          <SelectItem
+            color="success"
+            className="text-[#003632]"
+            key={programItem.id}
+            value={programItem.name}
+          >
+            {programItem.name}
+          </SelectItem>
+        ))}
+      </Select>
+      <Button
+        className="bg-[#befec1] text-[#003632] font-semibold w-full md:w-fit"
+        type="submit"
+        size="lg"
+      >
+        View Results
+      </Button>
+    </Form>
   );
 }
-  
