@@ -9,6 +9,7 @@ import type { LinksFunction } from "@remix-run/node";
 import stylesheet from "~/tailwind.css?url";
 import { NextUIProvider } from "@nextui-org/react";
 import Navbar from "./components/Navbar";
+import { Analytics } from "@vercel/analytics/react"
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -46,6 +47,7 @@ export default function App() {
         With a <span className="font-bold">better UI</span>
       </div>
       <Outlet />
+      <Analytics/>
     </div>
   );
 }
